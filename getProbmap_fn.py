@@ -12,33 +12,20 @@ from skimage import morphology
 import glob
 from shutil import copyfile
 
-# convert matlab model to onnx and then to tensorflow
-# ------------------------------------------------------------------------------
-# # in matlab
-# mode_name = 'Retrain1_alexnet_DSTvST_same_minBS100_maxEp50_learnRT0.0001_2'
-# modeldir = '/Users/eexna/Work/NERC Volcano/Results/'
-# load([modeldir, modelname, '.mat']);
-# exportONNXNetwork(netFineTune, [modeldir, modelname, '.onnx']);
-# ------------------------------------------------------------------------------
-
 # Define flags
 FLAGS = tf.flags.FLAGS
-tf.flags.DEFINE_string("data_dir", "/gws/nopw/j04/nceo_geohazards_vol1/projects/LiCS/volc-proc/detection/positives/", "path to wrapped interf")
-tf.flags.DEFINE_string("out_dir", "/gws/nopw/j04/nceo_geohazards_vol1/projects/LiCS/volc-proc/detection/retrain/", "path to output of detection")
-tf.flags.DEFINE_string("model_name", "Retrain1_alexnet_DSTvST_same_minBS100_maxEp50_learnRT0.0001_2.pd", "path to output of detection")
+tf.flags.DEFINE_string("data_dir", "images/", "path to wrapped interf")
+tf.flags.DEFINE_string("out_dir", "rgbprobMap/", "path to output of detection")
+tf.flags.DEFINE_string("model_name", "models/model1.pd", "path to model/checkpoint")
 tf.flags.DEFINE_integer("start_frame", 0, "First frame to process")
 tf.flags.DEFINE_integer("skip_frames", 20, "Process every skip_frames frame")
 tf.flags.DEFINE_bool("output_all", False, "Write the prob and rgb for all imaages, including those P < 0.4")
 
-DATA_DIR="/gws/nopw/j04/nceo_geohazards_vol1/projects/LiCS/volc-proc/current/"
-OUT_DIR ="/gws/nopw/j04/nceo_geohazards_vol1/projects/LiCS/volc-proc/detection/positives_new/"
-POSITIVE_DIR="/gws/nopw/j04/nceo_geohazards_vol1/projects/LiCS/volc-proc/detection/positives/"
-
 start = time.time()
 # model, input and output locations
-model_name = FLAGS.model_name # "Retrain1_alexnet_DSTvST_same_minBS100_maxEp50_learnRT0.0001_2.pd"
+model_name = FLAGS.model_name 
 wrappedinterf_path = FLAGS.data_dir
-checkpoint_path = "tfmodels/"
+checkpoint_path = "models/"
 rgbprobmap_path = FLAGS.out_dir + model_name[:-3] 
 probmap_path = rgbprobmap_path + "/probMap/"
 start_frame = FLAGS.start_frame
@@ -51,19 +38,6 @@ if not os.path.exists(rgbprobmap_path + '/'):
 
 if not os.path.exists(probmap_path):
     os.mkdir(probmap_path)
-
-# # read onnx model
-# ------------------------------------------------------------------------------
-# in Matlab
-# load('D:\VolcanicUnrest\LiCS\model_retrain\RetrainLiCS.mat','netFineTune')
-# exportONNXNetwork(netFineTune,'D:\VolcanicUnrest\LiCS\model_retrain\RetrainLiCS.onnx');
-# in Python
-# import onnx
-# from onnx_tf.backend import prepare
-# onnx_model = onnx.load(checkpoint_path + model_name + ".onnx")  # load onnx model
-# tf_rep = prepare(onnx_model)  # prepare tf representation
-# tf_rep.export_graph(checkpoint_path + model_name + ".pd") 
-# ------------------------------------------------------------------------------
 
 #mean of imagenet dataset in BGR
 imagenet_mean = np.array([104., 117., 124.], dtype=np.float32)
@@ -158,13 +132,10 @@ with tf.compat.v1.Session() as sess:
                     # Put in prob map
                     # if (starty>0) and (startx>0):
                     if np.isnan(probs[0,0]):
-                        probs[0,0] = 0.95
+                        probs[0,0] = 0.0
                         
                     probMap[starty:starty+hpatch, startx:startx+wpatch] += probs[0,0]*wmap*(testimg.sum()/hpatch/wpatch/3) 
                     
-                    # Show class name and prob in the title
-                    # probtext = "Class: " + "%d" %np.argmax(probs) + ", probability: %.4f" %probs[0,1]
-                    # print(probtext)
                     
         # Normalised weight
         probMap /= weightMap
@@ -174,7 +145,7 @@ with tf.compat.v1.Session() as sess:
         writer.writerow([filename[:len(filename[1])-5],probMap.max()])
 
         # Overlay probmap on interferogram
-        if (probMap.max() > 0.4) or output_all:
+        if (probMap.max() > 0.5) or output_all:
             im_scale = image/255.
             im_scale[:,:,2] = im_scale[:,:,2]*(1-probMap) + probMap
             im_scale[:,:,1] = im_scale[:,:,1]*(1-probMap) + probMap
@@ -198,7 +169,7 @@ with tf.compat.v1.Session() as sess:
             else:
                 cv2.imwrite(rgbprobmap_path + '/' +  "rgbprobMap_" + filename[:len(filename[1])-4] + "jpg", im_scale*255.)
 
-            if probMap.max() > 0.4: # 0.79:
+            if probMap.max() > 0.5: 
                 subname = f.split("/")
                 # find if alread positve
                 interfname = folderlist[-3] + '_' + folderlist[-2] + '_' + filename
@@ -209,11 +180,6 @@ with tf.compat.v1.Session() as sess:
             cv2.imwrite(probmap_path  +  "probMap_" + filename[:len(filename[1])-4] + "jpg", probMap*255.)
             print(f)
         
-        # Create visualise prob map with interferogram
-        # fig.add_subplot(1,5,i+1)
-        # plt.imshow(probMap + image[:,:,0]/255)
-        # plt.title("Max prob of deform: %.4f" %probMap.max())
-        # plt.axis('off')
 
 endt = time.time()
 print("time elapsed:" + str(endt - start))
