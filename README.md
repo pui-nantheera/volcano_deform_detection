@@ -21,7 +21,9 @@ Download models:
 ------------------------------------
 To retrain
 ------------------------------------
-We trained our models with Matlab. You can download the pretrained model here: <a href="https://uob-my.sharepoint.com/:u:/g/personal/eexna_bristol_ac_uk/EXH66HZ2rxlDrZBEoo5fgIABXYWYNcZl6N723jKesLdA9w?e=ssXsa8">model2.mat</a>
+We trained our models with Matlab. You can download the pretrained model here: <a href="https://uob-my.sharepoint.com/:u:/g/personal/eexna_bristol_ac_uk/EXH66HZ2rxlDrZBEoo5fgIABXYWYNcZl6N723jKesLdA9w?e=ssXsa8">model2.mat</a>.
+Dataset is saved in two folders named 'deform' and stratified' under the main data folder 'data/deform' and 'data/stratified'.
+For more details, please see comments in <a href="https://github.com/pui-nantheera/volcano_deform_detection/blob/main/runTrain.m">runTrain.m</a>.
 
 The new model in mat file can be converted to newmodel.pd to use with Python Tensorflow as follows.
 
