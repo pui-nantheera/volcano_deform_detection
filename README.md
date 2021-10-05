@@ -55,3 +55,5 @@ Journal of Geophysical Research: Solid Earth, 2018. [<a href="https://agupubs.on
 
 [<a href="https://arxiv.org/abs/1905.07286">Paper1</a>] A deep learning approach to detecting volcano deformation from satellite imagery using synthetic datasets, N Anantrasirichai, J Biggs, F Albino, D Bull
 Remote Sensing of Environment 230, 2019. [<a href="https://www.sciencedirect.com/science/article/pii/S003442571930183X">https://doi.org/10.1016/j.rse.2019.04.032</a>]
+
+<a href="https://doi.org/10.5281/zenodo.5550815"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5550815.svg" alt="DOI"></a>
