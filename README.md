@@ -3,7 +3,7 @@
 ------------------------------------
 To run detection
 ------------------------------------
-Usage for testing all interferograms (converted to grayscale and save in png format) in data folder:
+Usage for testing all interferograms (**converted to grayscale and save in png format**) in data folder:
 
 ```python
 DATA_DIR="data/"
