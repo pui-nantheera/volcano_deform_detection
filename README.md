@@ -14,14 +14,14 @@ python getProbmap_fn.py --out_dir="$OUT_DIR" --data_dir="$DATA_DIR" --model_name
 ```
 Download models:
 
-- [Paper1] <a href="https://uob-my.sharepoint.com/:u:/g/personal/eexna_bristol_ac_uk/Ef-Z187hrNBInYzNIhjihkIBA4g47w93zDtXgk-jkHrl9Q?e=KslBWQ">Model1</a>
-- [Paper2] <a href="https://uob-my.sharepoint.com/:u:/g/personal/eexna_bristol_ac_uk/EcQeotn8ogxNpvvQtTmv3MUBzxHn6cm1Ob6ybmHKyWhxZA?e=akrWpi">Model2</a>
+- [Paper1] <a href="https://zenodo.org/records/10437575">Model1</a>
+- [Paper2] <a href="https://zenodo.org/records/10437575">Model2</a>
 
 
 ------------------------------------
 To retrain
 ------------------------------------
-We trained our models with Matlab. You can download the pretrained model here: <a href="https://uob-my.sharepoint.com/:u:/g/personal/eexna_bristol_ac_uk/EXH66HZ2rxlDrZBEoo5fgIABXYWYNcZl6N723jKesLdA9w?e=4QBoSj">model2.mat</a>.
+We trained our models with Matlab. You can download the pretrained model here: <a href="https://zenodo.org/records/10437575">model2.mat</a>.
 Dataset is saved in two folders named 'deform' and stratified' under the main data folder 'data/deform' and 'data/stratified'.
 For more details, please see comments in <a href="https://github.com/pui-nantheera/volcano_deform_detection/blob/main/runTrain.m">runTrain.m</a>.
 
